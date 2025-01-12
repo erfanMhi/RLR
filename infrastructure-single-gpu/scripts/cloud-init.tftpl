@@ -1,0 +1,28 @@
+#cloud-config
+users:
+  - name: ${vm_username}
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ${ssh_public_key}
+
+write_files:
+  - path: /etc/systemd/system/mount-fs.service
+    content: |
+      [Unit]
+      Description=Mount filesystem
+      After=network.target
+
+      [Service]
+      Type=oneshot
+      RemainAfterExit=yes
+      ExecStart=/usr/bin/mount /dev/disk/by-id/virtio-${fs_device_name} /mnt/data
+      
+      [Install]
+      WantedBy=multi-user.target
+
+runcmd:
+  - mkdir -p /mnt/data
+  - systemctl daemon-reload
+  - systemctl enable mount-fs.service
+  - systemctl start mount-fs.service 
