@@ -76,3 +76,15 @@ poetry.lock
 .terraform/
 terraform.tfstate
 terraform.tfstate.backup
+*.lock.hcl
+
+# general locks
+*.lock
+
+# models files
+*.pth
+*.bin
+*.bin.index
+*.bin.index.json
+*.bin.index.json.lock
+*.dat
